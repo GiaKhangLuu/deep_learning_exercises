@@ -42,7 +42,6 @@ def sigmoid_derivative(x):
 
 """
     Ex 04: Image to Vector
-    -> Using numpy, we have totally 3 methods to convert an array to a vector
     Method 01: flatten()
     Method 02: ravel()
     Method 03: reshape()
@@ -59,6 +58,35 @@ def image2vector(image):
     v = image.reshape(-1)
     return v
 
+"""
+    Ex 06: softmax
+"""
+def softmax(x):
+    # Converting to numpy array
+    x = np.array(x)
+
+    # Step 1: Calculating exponential func (e^x)
+    x_exp = np.exp(x)
+
+    # Step 2: Calculating sum of all elements in each row
+    x_sum = np.sum(x_exp, axis=1, keepdims=True)
+
+    # Step 3: Calculating softmax by dividing x_exp by x_sum
+    s = x_exp / x_sum
+    return s
+
+def softmax_stable(x):
+    """
+    Softmax stable helps to solve the overflow problem when any value is huge.
+    Minus each value by the maximum of each row.  
+    """
+    x = np.array(x)
+    max_values = np.max(x, axis=1, keepdims=True)
+    x_exp = np.exp(x - max_values)
+    x_sum = np.sum(x_exp, axis=1, keepdims=True)
+    return x_exp / x_sum
+
+
 if __name__ == '__main__':
     # Run ex 01:
     #print(basic_sigmoid(1))
@@ -72,24 +100,26 @@ if __name__ == '__main__':
     #print(sigmoid_derivative(arr))
 
     # Run ex 04: 
+    #image = cv2.cvtColor(cv2.imread('./dump.jpeg'), cv2.COLOR_BGR2RGB)
     #image = np.random.rand(3, 3, 1)
-    image = cv2.cvtColor(cv2.imread('./dump.jpeg'), cv2.COLOR_BGR2RGB)
-    image = cv2.resize(image, (5, 5))
-    v = image2vector(image)
+    #image = cv2.resize(image, (5, 5))
+    #v = image2vector(image)
 
-    # Plot using matplotlib
-    # Create a figure and axis
-    fig, ax = plt.subplots(ncols=2, nrows=1)
+    ## Plot using matplotlib
+    ## Create a figure and axis
+    #fig, ax = plt.subplots(ncols=2, nrows=1)
 
-    # Display the image data as a heatmap
-    ax[0].imshow(image, cmap='gray')
-    ax[1].imshow(np.expand_dims(v, 1), cmap='gray')
+    ## Display the image data as a heatmap
+    #ax[0].imshow(image, cmap='gray')
+    #ax[1].imshow(np.expand_dims(v, 1), cmap='gray')
 
-    # Saving the plot
-    plt.savefig('./plot_ex04.png')
+    ## Saving the plot
+    #plt.savefig('./plot_ex04.png')
 
-    # Show the plot
-    plt.show()
+    ## Show the plot
+    #plt.show()
 
-
-    # Plot using cv2
+    # Run ex 06:
+    x = [[1, 2, 3, 0, 0], [4, 5, 6, 7, 8]]
+    print(softmax(x))
+    print(softmax_stable(x))
