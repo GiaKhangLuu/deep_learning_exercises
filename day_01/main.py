@@ -3,123 +3,106 @@ import math
 import matplotlib.pyplot as plt
 import cv2
 
-"""
-    Ex 01: Calculating sigmoid (math.exp)
-"""
-def basic_sigmoid(x):
-    s = 1 / (1 + math.exp(-x))
-    return s
+# Ex 09
+def read_image(img_path):
+    img = cv2.imread(img_path)
+    return img
 
-"""
-    Ex 02: Calculating sigmoid (numpy)
-"""
-def sigmoid_naive(x):
+def get_image_dimension(img):
+    img_dim = img.shape
+    return img_dim
+
+def convert_to_gray_scale(img):
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img_gray
+
+def resize_img(img, new_size):
+    img_resize = cv2.resize(img, new_size, cv2.INTER_LINEAR)
+    return img_resize
+
+def show_img(img, window_name='image'):
     """
-    This is naive version of calculating sigmoid on an array => We have to
-    loop through the array and calculating on each input 
+    cv2.imshow helps to convert image to RGB to show 
     """
-    vector_output = []
-    for i in x:
-        vector_output.append(basic_sigmoid(i))
-    return vector_output
+    cv2.imshow(window_name, img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    return img
 
-def sigmoid(x):
-    """
-    Using numpy, it will be cleaner and faster 
-    """
-    vector_input = np.array(x)
-    vector_output = 1 / (1 + np.exp(- vector_input))
-    return vector_output
+# Ex 11
+def show_video(video_path):
+    video_cap = cv2.VideoCapture(video_path)
+    if video_cap.isOpened() == False:
+        print('Không thể mở video/camera')
+    while True:
+        ret, frame = video_cap.read()
 
-"""
-    Ex 03: Calculating deravative of sigmoid
-"""
-def sigmoid_derivative(x):
-    x = np.array(x)
-    s = sigmoid(x)
-    ds = s * (1 - s)
-    return ds
+        # Check if the video has ended
+        if frame is None:
+            #print("End of video.")
+            #break
+            # If the video has ended, rewind to the beginning
+            video_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            continue
 
-"""
-    Ex 04: Image to Vector
-    Method 01: flatten()
-    Method 02: ravel()
-    Method 03: reshape()
-"""
-def image2vector(image):
-    """
-    Assuming that image is an numpy array
-    """
-    # Flatten()
-    v = image.flatten()
-    # Ravel()
-    v = image.ravel()
-    # Reshape()
-    v = image.reshape(-1)
-    return v
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-"""
-    Ex 06: softmax
-"""
-def softmax(x):
-    # Converting to numpy array
-    x = np.array(x)
+        cv2.imshow("video", frame)
 
-    # Step 1: Calculating exponential func (e^x)
-    x_exp = np.exp(x)
+        if not ret:
+            print("Không thể nhận frame. Thoát ...")
+            break
 
-    # Step 2: Calculating sum of all elements in each row
-    x_sum = np.sum(x_exp, axis=1, keepdims=True)
-
-    # Step 3: Calculating softmax by dividing x_exp by x_sum
-    s = x_exp / x_sum
-    return s
-
-def softmax_stable(x):
-    """
-    Softmax stable helps to solve the overflow problem when any value is huge.
-    Minus each value by the maximum of each row.  
-    """
-    x = np.array(x)
-    max_values = np.max(x, axis=1, keepdims=True)
-    x_exp = np.exp(x - max_values)
-    x_sum = np.sum(x_exp, axis=1, keepdims=True)
-    return x_exp / x_sum
-
+        if cv2.waitKey(1) == ord('q'):
+            break
+    
+    video_cap.release()
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    # Run ex 01:
-    #print(basic_sigmoid(1))
+    # --------------Ex 09----------------
+    """
+    img_path = './asset/lenna_dump.png'
 
-    # Run ex 02:
-    #arr = [1, 2, 3]
-    #print(sigmoid_naive(arr))
+    # Color image
+    img = read_image(img_path)
+    show_img(img, 'color image')
+    img_color_shape = get_image_dimension(img)
+    print('Color Shape = ', img_color_shape)
 
-    # Run ex 03:
-    #arr = [1, 2, 3]
-    #print(sigmoid_derivative(arr))
+    # Gray scale image
+    img_gray = convert_to_gray_scale(img)
+    show_img(img_gray, 'gray scale image')
+    img_gray_shape = get_image_dimension(img_gray)
+    print('Gray Shape = ', img_gray_shape) 
 
-    # Run ex 04: 
-    #image = cv2.cvtColor(cv2.imread('./dump.jpeg'), cv2.COLOR_BGR2RGB)
-    #image = np.random.rand(3, 3, 1)
-    #image = cv2.resize(image, (5, 5))
-    #v = image2vector(image)
+    # Resize
+    new_shape = (200, 100)  # new_shape = (new_width, new_height)
+    new_size_img = resize_img(img, new_shape)
+    show_img(new_size_img, 'new size img')
+    new_size_img_shape = get_image_dimension(new_size_img)
+    print('Resize image shape = ', new_size_img_shape)
+    """
 
-    ## Plot using matplotlib
-    ## Create a figure and axis
-    #fig, ax = plt.subplots(ncols=2, nrows=1)
+    # -------------Ex 10-----------------
+    #img_path = './asset/lenna_dump.png'
+    #img = cv2.imread(img_path)
 
-    ## Display the image data as a heatmap
-    #ax[0].imshow(image, cmap='gray')
-    #ax[1].imshow(np.expand_dims(v, 1), cmap='gray')
+    #cv2.imshow('original image', img)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
-    ## Saving the plot
-    #plt.savefig('./plot_ex04.png')
+    #new_width = 300
+    #old_height, old_width, _ = img.shape
+    #img_scale = old_width / old_height
+    #new_height = int(new_width // img_scale)
+    #new_shape = (new_width, new_height)
+    #new_img = cv2.resize(img, new_shape)
 
-    ## Show the plot
-    #plt.show()
+    #cv2.imshow('resize image', new_img)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
-    # Run ex 06:
-    x = [[1, 2, 3, 0, 0], [4, 5, 6, 7, 8]]
-    print(softmax(x))
-    print(softmax_stable(x))
+    # -------------Ex 11-----------------
+    video_path = '/Users/giakhang/dev/teaching/huflit/deep_learning/day_01/asset/dump_video.mp4'
+    show_video(video_path)
