@@ -35,7 +35,7 @@ def upsampling_block(x, skip_connection, num_filters):
     return x
 
 def U_NET(width, height, channels, n_classes):
-    inputs = layers.Input(shape=(width, height, channels))
+    inputs = layers.Input(shape=(height, width, channels))
 
     # Encoder
     # downsample 1
