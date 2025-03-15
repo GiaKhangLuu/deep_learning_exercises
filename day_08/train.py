@@ -123,5 +123,5 @@ if __name__ == '__main__':
 
     train_loader, val_loader = create_dataloaders(X_train, Y_train, X_val, Y_val, batch_size)
 
-    device = "cpu"  # "cuda", "cpu" or "mps"
+    device = "cuda"  # "cuda", "cpu" or "mps"
     model = train_model(model, train_loader, val_loader, criterion, optimizer, epochs, device)

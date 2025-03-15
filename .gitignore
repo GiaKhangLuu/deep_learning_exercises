@@ -9,5 +9,7 @@ indoor_CVPR_dataset
 
 day_08/Car_Segmentation/data
 day_08/data
+day_08/*.pth
+day_08/*.png
 
 day_09/Object_Localization_1/dataset

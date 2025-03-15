@@ -40,7 +40,10 @@ if __name__ == '__main__':
     mask_pred = train_id_to_color[mask_pred]
 
     mask_pred = np.array(mask_pred, dtype='uint8')
-    combo_image = cv2.addWeighted(image, 0.8, mask_pred, 1, 1)
+
+    img_plot = image.copy()
+    img_plot = (img_plot * 255).astype(np.uint8)
+    combo_image = np.hstack([img_plot, mask_pred])
     
     _ = plt.figure()
     plt.imshow(combo_image)
