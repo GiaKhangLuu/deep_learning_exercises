@@ -52,6 +52,6 @@ def main(input_dir, output_dir):
 
 if __name__ == '__main__':
     # Set your input and output directories
-    input_directory = Path('/Users/giakhang/Downloads/caltech-101/Annotations')
-    output_directory = Path('/Users/giakhang/dev/teaching/huflit/deep_learning/day_09/Object_Localization_1/dataset/annotations')
+    input_directory = Path('./dataset/annotations')
+    output_directory = Path('./dataset/annotations')
     main(input_directory, output_directory)

@@ -1,7 +1,7 @@
 import cv2
 import os
 import configuration as config
-from tensorflow.keras.utils import img_to_array, load_img
+import pandas as pd
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
@@ -21,18 +21,20 @@ def get_data(height, width):
 
     # Duyệt qua các file CSV để đọc dữ liệu
     for csvFileName in csvFileNames:
+        if not csvFileName.endswith('.csv'):
+            continue
         # Mở file CSV
         csvPath = config.ANNOTATION_PATH / csvFileName
-        rows = open(csvPath).read().strip().split("\n")
+        rows = pd.read_csv(str(csvPath), encoding='utf-8')
 
         # Đọc từng dòng
-        for row in rows:
+        for index, row in rows.iterrows():
             # Lấy thông tin file ảnh
-            (filename, x1, y1, x2, y2, label) = row.split(",")
+            (filename, x1, y1, x2, y2, label) = row
 
             # Đọc file ảnh với hàm opencv
             imagePath = config.IMAGE_PATH / label / filename
-            image = cv2.imread(str(imagePath))
+            image = cv2.imread(str(imagePath))[..., ::-1]
             if image is not None:
                 (h, w, depth) = image.shape
 
@@ -43,8 +45,7 @@ def get_data(height, width):
                 y2 = float(y2) / h
 
                 # Load lại ảnh với hàm load_img với kích thước height, width
-                image = load_img(imagePath, target_size=(height, width))
-                image = img_to_array(image)
+                image = cv2.resize(image, (width, height))
 
                 images.append(image)
                 labels.append(label)
@@ -80,19 +81,19 @@ if __name__ == "__main__":
     print("Train: ", len(images_train))
     print("Valid: ", len(images_valid))
 
-    #img = images_train[0]
-    #img = (img * 255).astype(np.uint8)
-    #h, w, _ = img.shape
-    #bboxes = bboxes_train[0]
-    #x1, y1, x2, y2 = bboxes
-    #x1 = int(x1 * w)
-    #y1 = int(y1 * h)
-    #x2 = int(x2 * w)
-    #y2 = int(y2 * h)
+    img = images_train[0]
+    img = (img * 255).astype(np.uint8)
+    h, w, _ = img.shape
+    bboxes = bboxes_train[0]
+    x1, y1, x2, y2 = bboxes
+    x1 = int(x1 * w)
+    y1 = int(y1 * h)
+    x2 = int(x2 * w)
+    y2 = int(y2 * h)
 
-    #print(labels_train[0])
+    print(labels_train[0])
 
-    #img = cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-    #plt.imshow(img)
+    img = cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+    plt.imshow(img)
 
-    #plt.savefig('test.jpg')
+    plt.savefig('test.jpg')
