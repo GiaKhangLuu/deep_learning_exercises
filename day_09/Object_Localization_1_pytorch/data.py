@@ -12,7 +12,7 @@ input: height, width
 output: images[], labels[], bboxes[]
 '''
 
-USED_CLASSES = ['airplane', 'face', 'motorcycle']
+USED_CLASSES = ['accordion', 'ant', 'buddha', 'camera', 'octopus']
 
 def get_data(height, width):
     images = []
@@ -24,7 +24,7 @@ def get_data(height, width):
 
     # Duyệt qua các file CSV để đọc dữ liệu
     for csvFileName in csvFileNames:
-        if not csvFileName.endswith('.csv') and csvFileName.split('.')[0] not in USED_CLASSES:
+        if not csvFileName.endswith('.csv') or csvFileName.split('.')[0] not in USED_CLASSES:
             continue
         # Mở file CSV
         csvPath = config.ANNOTATION_PATH / csvFileName

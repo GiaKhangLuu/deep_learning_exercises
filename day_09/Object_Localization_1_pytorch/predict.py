@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import cv2
 from torchvision import transforms
 from PIL import Image
-from model_pytorch import MyModel
+from day_09.Object_Localization_1_pytorch.model import MyModel
 
 def predict():
     # Load model

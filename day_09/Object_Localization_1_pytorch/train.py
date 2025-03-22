@@ -1,5 +1,5 @@
 import data
-from model_pytorch import MyModel
+from model import MyModel
 import numpy as np
 import torch
 import torch.optim as optim
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     # Kích thước dữ liệu
-    height, width, channel, nclasses = 224, 224, 3, 3
+    height, width, channel, nclasses = 224, 224, 3, 5
 
     # Load data
     images, labels, bboxes = data.get_data(height=height, width=width)

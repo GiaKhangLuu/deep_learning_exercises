@@ -15,3 +15,7 @@ day_08/*.png
 day_09/Object_Localization_1/dataset
 
 day_09/Object_Localization_1/*.pth
+
+day_09/Object_Localization_1_pytorch/*.png
+day_09/Object_Localization_1_pytorch/dataset
+day_09/Object_Localization_1_pytorch/*.pth
