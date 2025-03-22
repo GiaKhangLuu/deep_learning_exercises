@@ -13,3 +13,5 @@ day_08/*.pth
 day_08/*.png
 
 day_09/Object_Localization_1/dataset
+
+day_09/Object_Localization_1/*.pth
